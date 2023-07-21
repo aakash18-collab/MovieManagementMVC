@@ -1,0 +1,55 @@
+﻿
+
+@model MovieManagementMVC.Models.NowShowing
+
+@{
+    ViewData["Title"] = "View";
+}
+
+
+
+<h4>Now Showing</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Occupancy" class="control-label"></label>
+                <input asp-for="Occupancy" class="form-control" />
+                <span asp-validation-for="Occupancy" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="MovieName" class="control-label"></label>
+                @Html.DropDownList("MovieName", ViewBag.MovieName as SelectList, "Select a Movie:", new { @class = "form-control" })
+                <span asp-validation-for="MovieName" class="text-danger"></span>
+            </div>
+       
+
+            <div class="form-group">
+                <label asp-for="MovieDescription" class="control-label"></label>
+                @Html.DropDownList("MovieDescription", ViewBag.MovieDescription as SelectList, "Select a Description:", new { @class = "form-control" })
+                <span asp-validation-for="MovieDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HallName" class="control-label"></label>
+                @Html.DropDownList("HallName", ViewBag.HallName as SelectList, "Select a Hall Name:", new { @class = "form-control" })
+                <span asp-validation-for="HallName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShiftTime" class="control-label"></label>
+                @Html.DropDownList("ShiftTime", ViewBag.ShiftTime as SelectList, "Select a Time:", new { @class = "form-control" })
+                <span asp-validation-for="ShiftTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
