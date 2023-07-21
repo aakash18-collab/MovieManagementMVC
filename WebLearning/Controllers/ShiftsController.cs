@@ -56,7 +56,7 @@ namespace MovieManagementMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ShitId,ShitTime")] Shifts shifts)
+        public async Task<IActionResult> Create([Bind("ShitId,ShitTime,HallId")] Shifts shifts)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace MovieManagementMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ShitId,ShitTime")] Shifts shifts)
+        public async Task<IActionResult> Edit(int id, [Bind("ShitId,ShitTime,HallId")] Shifts shifts)
         {
             if (id != shifts.ShitId)
             {

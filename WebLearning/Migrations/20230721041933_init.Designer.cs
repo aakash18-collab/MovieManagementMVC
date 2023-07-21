@@ -11,8 +11,8 @@ using MovieManagementMVC.Data;
 namespace MovieManagementMVC.Migrations
 {
     [DbContext(typeof(MovieManagementMVCContext))]
-    [Migration("20230720200224_newtable")]
-    partial class newtable
+    [Migration("20230721041933_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,36 @@ namespace MovieManagementMVC.Migrations
                     b.HasKey("MovieId");
 
                     b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("MovieManagementMVC.Models.NowShowing", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("HallName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MovieDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MovieName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Occupancy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShiftTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NowShowings");
                 });
 
             modelBuilder.Entity("MovieManagementMVC.Models.Shifts", b =>

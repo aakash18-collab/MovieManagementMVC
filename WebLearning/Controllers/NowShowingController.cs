@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using MovieManagementMVC.Data;
 using MovieManagementMVC.Models;
 using System.Collections;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace MovieManagementMVC.Controllers
 {
@@ -48,34 +49,34 @@ namespace MovieManagementMVC.Controllers
             //{
             //    Movies = data
             //};
-            var movieItems = data.Select(movie => new SelectListItem
-            {
-                Value = movie.MovieId.ToString(),
-                Text = movie.MovieName
-            });
-            ViewBag.MovieName = movieItems;
-            //ViewBag.MovieName = new SelectList(data, "MovieId", "MovieName");
-            var movieDesc = data.Select(movie => new SelectListItem
-            {
-                Value = movie.MovieId.ToString(),
-                Text = movie.MovieDescription
-            });
-            ViewBag.MovieDescription = movieDesc;
-            //ViewBag.MovieDescription = new SelectList(data, "MovieId", "MovieDescription");
-            var hallName = data.Select(movie => new SelectListItem
-            {
-                Value = movie.HallId.ToString(),
-                Text = movie.HallName
-            });
-            ViewBag.HallName = hallName;
-            //ViewBag.HallName = new SelectList(data, "HallId", "HallName");
-            var shiftTime = data.Select(movie => new SelectListItem
-            {
-                Value = movie.ShiftId.ToString(),
-                Text = movie.ShiftTime
-            });
-            ViewBag.ShiftTime = shiftTime;
-            //ViewBag.ShiftTime = new SelectList(data, "ShiftId", "ShiftTime");
+            //var movieItems = data.Select(movie => new SelectListItem
+            //{
+            //    Value = movie.MovieId.ToString(),
+            //    Text = movie.MovieName
+            //});
+            //ViewBag.MovieName = movieItems;
+            ViewBag.MovieName = new SelectList(data, "MovieId", "MovieName");
+            //var movieDesc = data.Select(movie => new SelectListItem
+            //{
+            //    Value = movie.MovieId.ToString(),
+            //    Text = movie.MovieDescription
+            //});
+            //ViewBag.MovieDescription = movieDesc;
+            ViewBag.MovieDescription = new SelectList(data, "MovieId", "MovieDescription");
+            //var hallName = data.Select(movie => new SelectListItem
+            //{
+            //    Value = movie.HallId.ToString(),
+            //    Text = movie.HallName
+            //});
+            //ViewBag.HallName = hallName;
+            ViewBag.HallName = new SelectList(data, "HallId", "HallName");
+            //var shiftTime = data.Select(movie => new SelectListItem
+            //{
+            //    Value = movie.ShiftId.ToString(),
+            //    Text = movie.ShiftTime
+            //});
+            //ViewBag.ShiftTime = shiftTime;
+            ViewBag.ShiftTime = new SelectList(data, "ShiftId", "ShiftTime");
 
             return View();
             
@@ -83,16 +84,16 @@ namespace MovieManagementMVC.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Occupancy,MovieName,MovieDescription,HallName,ShiftTime")] NowShowing nowShowing)
+        public  List <MovieHallDTO>Create([Bind("Id,Occupancy,MovieName,MovieDescription,HallName,ShiftTime")] MovieHallDTO movieHallDTO)
         {
 
             if (ModelState.IsValid)
             {
-                _context.Add(nowShowing);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.Add(movieHallDTO);
+                 _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Index));
             }
-            return View(nowShowing);
+            return new List<MovieHallDTO>(movieHallDTO.ShiftTime.ToList());
         }
 
     }

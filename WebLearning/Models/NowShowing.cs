@@ -1,12 +1,17 @@
 ﻿using NuGet.DependencyResolver;
+using System.ComponentModel.DataAnnotations;
 
 namespace MovieManagementMVC.Models
 {
     public class NowShowing
     {
-        public int Id { get; set; }
-        public IEnumerable<Movies> Movies { get; set; }
-        public IEnumerable<Shifts> Shifts { get; set; }
-        public IEnumerable<Halls> Halls { get; set; }
+
+        [Key]
+        public string Id { get; set; }
+        public string Occupancy { get; set; }
+        public string MovieName { get; set; }
+        public string MovieDescription { get; set; }
+        public string HallName { get; set; }
+        public string ShiftTime { get; set; }
     }
 }
