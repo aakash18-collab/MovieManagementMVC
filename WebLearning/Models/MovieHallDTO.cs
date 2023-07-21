@@ -5,7 +5,7 @@ namespace MovieManagementMVC.Models
 {
 
     [NotMapped]
-    public class MovieHallDTO
+    public class MovieHallDTO : NowShowing
     {
         
         public string Occupancy { get; set; }

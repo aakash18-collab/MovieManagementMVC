@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +59,12 @@ namespace MovieManagementMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ShitId,ShitTime,HallId")] Shifts shifts)
         {
+            var checkShiftId = _context.Halls.Where(m => m.HallId == shifts.HallId).FirstOrDefault();
+
+            if (checkShiftId == null)
+            {
+                throw new UserFriendlyException("Hall with id " + shifts.HallId + " not found");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(shifts);

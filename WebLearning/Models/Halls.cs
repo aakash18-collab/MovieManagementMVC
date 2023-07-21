@@ -17,6 +17,7 @@ namespace MovieManagementMVC.Models
         public int MovieId { get; set; }
         public Movies Movies;
 
+
         [Display(Name = "Hall Description")]
         public string HallDescription { get; set;} = string.Empty;
     }

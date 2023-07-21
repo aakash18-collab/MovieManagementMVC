@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MovieManagementMVC.Data;
 using MovieManagementMVC.Models;
+using NuGet.Protocol.Core.Types;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,7 +24,6 @@ namespace MovieManagementMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             return _context.NowShowings != null ?
                         View(await _context.NowShowings.ToListAsync()) :
                         Problem("Entity set 'MovieManagementMVCContext.NowShowings'  is null.");
@@ -45,7 +47,16 @@ namespace MovieManagementMVC.Controllers
                                   ShiftTime = sft.ShitTime
                               }).ToListAsync();
 
-            //var model = new NowShowing
+       
+            ViewBag.MovieName = new SelectList(data, "MovieId","MovieName");
+          
+            ViewBag.MovieDescription = new SelectList(data, "MovieId", "MovieDescription");
+           
+            ViewBag.HallName = new SelectList(data, "HallId", "HallName");
+           
+            ViewBag.ShiftTime = new SelectList(data, "ShiftId",  "ShiftTime");
+
+            #region notinuse
             //{
             //    Movies = data
             //};
@@ -55,28 +66,25 @@ namespace MovieManagementMVC.Controllers
             //    Text = movie.MovieName
             //});
             //ViewBag.MovieName = movieItems;
-            ViewBag.MovieName = new SelectList(data, "MovieId", "MovieName");
             //var movieDesc = data.Select(movie => new SelectListItem
             //{
             //    Value = movie.MovieId.ToString(),
             //    Text = movie.MovieDescription
             //});
             //ViewBag.MovieDescription = movieDesc;
-            ViewBag.MovieDescription = new SelectList(data, "MovieId", "MovieDescription");
             //var hallName = data.Select(movie => new SelectListItem
             //{
             //    Value = movie.HallId.ToString(),
             //    Text = movie.HallName
             //});
             //ViewBag.HallName = hallName;
-            ViewBag.HallName = new SelectList(data, "HallId", "HallName");
             //var shiftTime = data.Select(movie => new SelectListItem
             //{
             //    Value = movie.ShiftId.ToString(),
             //    Text = movie.ShiftTime
             //});
             //ViewBag.ShiftTime = shiftTime;
-            ViewBag.ShiftTime = new SelectList(data, "ShiftId", "ShiftTime");
+            #endregion
 
             return View();
             
@@ -84,18 +92,35 @@ namespace MovieManagementMVC.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task <IActionResult>Create([Bind("Id,Occupancy,MovieName,MovieDescription,HallName,ShiftTime")] MovieHallDTO movieHallDTO)
+        public bool Create(MovieHallDTO movieHallDTO)
         {
-
-            if (ModelState.IsValid)
+            if (movieHallDTO == null)
             {
-                _context.Add(movieHallDTO);
-                 _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return false;
             }
-            return View(movieHallDTO);
-            /*return new List<MovieHallDTO>(movieHallDTO.ShiftTime.ToList());*/
+            NowShowing nowShowing = new NowShowing();
+            nowShowing.Occupancy = movieHallDTO.Occupancy;
+            nowShowing.MovieName = movieHallDTO.MovieName;
+            nowShowing.MovieDescription= movieHallDTO.MovieDescription;
+            nowShowing.HallName= movieHallDTO.HallName;
+            nowShowing.ShiftTime = movieHallDTO.ShiftTime;
+            _context.Add(nowShowing);
+            _context.SaveChangesAsync();
+
+            return true;
         }
+        //public async Task <IActionResult>Create([Bind("Id,Occupancy,MovieName,MovieDescription,HallName,ShiftTime")] MovieHallDTO movieHallDTO)
+        //{
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(movieHallDTO);
+        //         _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(movieHallDTO);
+        //    /*return new List<MovieHallDTO>(movieHallDTO.ShiftTime.ToList());*/
+        //}
 
     }
 
