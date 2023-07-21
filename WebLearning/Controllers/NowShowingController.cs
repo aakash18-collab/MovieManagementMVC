@@ -84,16 +84,17 @@ namespace MovieManagementMVC.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public  List <MovieHallDTO>Create([Bind("Id,Occupancy,MovieName,MovieDescription,HallName,ShiftTime")] MovieHallDTO movieHallDTO)
+        public async Task <IActionResult>Create([Bind("Id,Occupancy,MovieName,MovieDescription,HallName,ShiftTime")] MovieHallDTO movieHallDTO)
         {
 
             if (ModelState.IsValid)
             {
                 _context.Add(movieHallDTO);
                  _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
-            return new List<MovieHallDTO>(movieHallDTO.ShiftTime.ToList());
+            return View(movieHallDTO);
+            /*return new List<MovieHallDTO>(movieHallDTO.ShiftTime.ToList());*/
         }
 
     }
