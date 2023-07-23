@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieManagementMVC.Data;
 
@@ -10,9 +11,11 @@ using MovieManagementMVC.Data;
 namespace MovieManagementMVC.Migrations
 {
     [DbContext(typeof(MovieManagementMVCContext))]
-    partial class MovieManagementMVCContextModelSnapshot : ModelSnapshot
+    [Migration("20230723162724_ModelNameChanged")]
+    partial class ModelNameChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,6 +88,7 @@ namespace MovieManagementMVC.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Occupancy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShiftTime")

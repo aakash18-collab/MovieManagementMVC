@@ -1,6 +1,6 @@
 ﻿
 
-@model MovieManagementMVC.Models.NowShowing
+@model MovieManagementMVC.Models.MoviesDropDownViewModel
 
 @{
     ViewData["Title"] = "View";
@@ -19,29 +19,32 @@
                 <input asp-for="Occupancy" class="form-control" />
                 <span asp-validation-for="Occupancy" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="MovieHallDTO.MovieName">Movie:</label>
+                <select asp-for="MovieHallDTO.MovieName" asp-items="@Model.MovieOptions" class="form-control">
+                    <option value="">Select a Movie</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieHallDTO.MovieDescription">Description:</label>
+                <select asp-for="MovieHallDTO.MovieDescription" asp-items="@Model.DescriptionOptions" class="form-control">
+                <option value="">Description:</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieHallDTO.HallName">Hall:</label>
+                <select asp-for="MovieHallDTO.HallName" asp-items="@Model.HallOptions" class="form-control">
+                    <option value="">Select a Hall:</option>
+                </select>
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="MovieHallDTO.ShiftTime">Shift:</label>
+                <select asp-for="MovieHallDTO.ShiftTime" asp-items="@Model.ShiftOptions" class="form-control">
+                <option value="">Select a Shift:</option>
+                </select>
+            </div>
 
-            <div class="form-group">
-                <label asp-for="MovieName" class="control-label"></label>
-                @Html.DropDownList("MovieName", ViewBag.MovieName as SelectList, "Select a Movie:", new { @class = "form-control" })
-                <span asp-validation-for="MovieName" class="text-danger"></span>
-            </div>
-       
-
-            <div class="form-group">
-                <label asp-for="MovieDescription" class="control-label"></label>
-                @Html.DropDownList("MovieDescription", ViewBag.MovieDescription as SelectList, "Select a Description:", new { @class = "form-control" })
-                <span asp-validation-for="MovieDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HallName" class="control-label"></label>
-                @Html.DropDownList("HallName", ViewBag.HallName as SelectList, "Select a Hall Name:", new { @class = "form-control" })
-                <span asp-validation-for="HallName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShiftTime" class="control-label"></label>
-                @Html.DropDownList("ShiftTime", ViewBag.ShiftTime as SelectList, "Select a Time:", new { @class = "form-control" })
-                <span asp-validation-for="ShiftTime" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -52,4 +55,6 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+
 

@@ -15,7 +15,7 @@ namespace MovieManagementMVC.Controllers
     public class NowShowingController : Controller
     {
         private readonly MovieManagementMVCContext _context;
-      
+
 
         public NowShowingController(MovieManagementMVCContext context)
         {
@@ -27,102 +27,153 @@ namespace MovieManagementMVC.Controllers
             return _context.NowShowings != null ?
                         View(await _context.NowShowings.ToListAsync()) :
                         Problem("Entity set 'MovieManagementMVCContext.NowShowings'  is null.");
-           
+
+        }
+        public async Task<IActionResult> Details(string? id)
+        {
+            if (id == null || _context.NowShowings == null)
+            {
+                return NotFound();
+            }
+
+            var ns = await _context.NowShowings
+                .FirstOrDefaultAsync(m => m.Id == id.ToString());
+            if (ns == null)
+            {
+                return NotFound();
+            }
+
+            return View(ns);
         }
         public async Task<IActionResult> Create()
         {
+            //var data = await (from mov in _context.Movies
+            //                      join hal in _context.Halls on mov.MovieId equals hal.MovieId
+            //                      join sft in _context.Shifts on hal.HallId equals sft.HallId
+            //                      select new MovieHallDTO
+            //                      {
+            //                          Occupancy = "",
+            //                          MovieName = mov.MovieName,
+            //                          MovieDescription = mov.Description,
+            //                          HallName = hal.HallName,
+            //                          ShiftTime = sft.ShitTime
+            //                      }).ToListAsync();
 
-            var data = await (from mov in _context.Movies
-                              join hal in _context.Halls on mov.MovieId equals hal.MovieId
-                              join sft in _context.Shifts on hal.HallId equals sft.HallId
-                              select new MovieHallDTO
-                              {
-                                  Occupancy = "",
-                                  MovieId = mov.MovieId,
-                                  MovieName = mov.MovieName,
-                                  MovieDescription = mov.Description,
-                                  HallId = hal.HallId,
-                                  HallName = hal.HallName,
-                                  ShiftId = sft.ShitId,
-                                  ShiftTime = sft.ShitTime
-                              }).ToListAsync();
+            var movieNames = await _context.Movies
+                .Select(m => new SelectListItem
+                {
+                    Value = m.MovieName,
+                    Text = m.MovieName
+                }).ToListAsync();
 
-       
-            ViewBag.MovieName = new SelectList(data, "MovieId","MovieName");
-          
-            ViewBag.MovieDescription = new SelectList(data, "MovieId", "MovieDescription");
-           
-            ViewBag.HallName = new SelectList(data, "HallId", "HallName");
-           
-            ViewBag.ShiftTime = new SelectList(data, "ShiftId",  "ShiftTime");
+            var descNames = await _context.Movies
+           .Select(m => new SelectListItem
+           {
+               Value = m.Description,
+               Text = m.Description
+           }).ToListAsync();
 
-            #region notinuse
-            //{
-            //    Movies = data
-            //};
-            //var movieItems = data.Select(movie => new SelectListItem
-            //{
-            //    Value = movie.MovieId.ToString(),
-            //    Text = movie.MovieName
-            //});
-            //ViewBag.MovieName = movieItems;
-            //var movieDesc = data.Select(movie => new SelectListItem
-            //{
-            //    Value = movie.MovieId.ToString(),
-            //    Text = movie.MovieDescription
-            //});
-            //ViewBag.MovieDescription = movieDesc;
-            //var hallName = data.Select(movie => new SelectListItem
-            //{
-            //    Value = movie.HallId.ToString(),
-            //    Text = movie.HallName
-            //});
-            //ViewBag.HallName = hallName;
-            //var shiftTime = data.Select(movie => new SelectListItem
-            //{
-            //    Value = movie.ShiftId.ToString(),
-            //    Text = movie.ShiftTime
-            //});
-            //ViewBag.ShiftTime = shiftTime;
-            #endregion
+            var hallNames = await _context.Halls
+              .Select(m => new SelectListItem
+              {
+                  Value = m.HallName,
+                  Text = m.HallName
+              }).ToListAsync();
 
-            return View();
-            
+            var shifts = await _context.Shifts
+             .Select(m => new SelectListItem
+             {
+                 Value = m.ShitTime,
+                 Text = m.ShitTime
+             }).ToListAsync();
+
+            var viewModel = new MoviesDropDownViewModel
+            {
+                Occupancy = "",
+                MovieOptions = movieNames,
+                HallOptions = hallNames,
+                ShiftOptions = shifts,
+                DescriptionOptions = descNames,
+                MovieHallDTO = new MovieHallDTO()
+            };
+            return View(viewModel);
+
+
 
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public bool Create(MovieHallDTO movieHallDTO)
+        public async Task<IActionResult> Create(MoviesDropDownViewModel viewModel)
         {
-            if (movieHallDTO == null)
+            //if (ModelState.IsValid)
+            //{
+            var nowShowing = new NowShowing
             {
-                return false;
-            }
-            NowShowing nowShowing = new NowShowing();
-            nowShowing.Occupancy = movieHallDTO.Occupancy;
-            nowShowing.MovieName = movieHallDTO.MovieName;
-            nowShowing.MovieDescription= movieHallDTO.MovieDescription;
-            nowShowing.HallName= movieHallDTO.HallName;
-            nowShowing.ShiftTime = movieHallDTO.ShiftTime;
+
+                Occupancy = viewModel.Occupancy,
+                MovieName = viewModel.MovieHallDTO.MovieName,
+                MovieDescription = viewModel.MovieHallDTO.MovieDescription,
+                HallName = viewModel.MovieHallDTO.HallName,
+                ShiftTime = viewModel.MovieHallDTO.ShiftTime
+            };
+
             _context.Add(nowShowing);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            return true;
+            return RedirectToAction(nameof(Index));
+            //return View(viewModel); }
         }
-        //public async Task <IActionResult>Create([Bind("Id,Occupancy,MovieName,MovieDescription,HallName,ShiftTime")] MovieHallDTO movieHallDTO)
-        //{
+        public async Task<IActionResult> Edit(string? id)
+        {
+            if (id == null || _context.NowShowings == null)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(movieHallDTO);
-        //         _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(movieHallDTO);
-        //    /*return new List<MovieHallDTO>(movieHallDTO.ShiftTime.ToList());*/
-        //}
+            var ns = await _context.NowShowings
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (ns == null)
+            {
+                return NotFound();
+            }
+
+            return View(ns);
+        }
+        public async Task<IActionResult> Delete(string? id)
+        {
+            if (id == null || _context.NowShowings == null)
+            {
+                return NotFound();
+            }
+
+            var ns = await _context.NowShowings
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (ns == null)
+            {
+                return NotFound();
+            }
+
+            return View(ns);
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            if (_context.NowShowings == null)
+            {
+                return Problem("Entity set 'MovieManagementMVCContext.NowShowings'  is null.");
+            }
+            var ns = await _context.NowShowings.FindAsync(id);
+            if (ns != null)
+            {
+                _context.NowShowings.Remove(ns);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
     }
-
-  
 }
+
+

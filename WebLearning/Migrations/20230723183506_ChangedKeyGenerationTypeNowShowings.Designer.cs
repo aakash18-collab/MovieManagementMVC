@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieManagementMVC.Data;
 
@@ -10,9 +11,11 @@ using MovieManagementMVC.Data;
 namespace MovieManagementMVC.Migrations
 {
     [DbContext(typeof(MovieManagementMVCContext))]
-    partial class MovieManagementMVCContextModelSnapshot : ModelSnapshot
+    [Migration("20230723183506_ChangedKeyGenerationTypeNowShowings")]
+    partial class ChangedKeyGenerationTypeNowShowings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,7 +72,6 @@ namespace MovieManagementMVC.Migrations
             modelBuilder.Entity("MovieManagementMVC.Models.NowShowing", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("HallName")

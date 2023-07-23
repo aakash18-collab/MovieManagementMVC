@@ -10,7 +10,8 @@ namespace MovieManagementMVC.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
-        public string Occupancy { get; set; }
+
+        public string? Occupancy { get; set; }
         public string MovieName { get; set; }
         public string MovieDescription { get; set; }
         public string HallName { get; set; }
