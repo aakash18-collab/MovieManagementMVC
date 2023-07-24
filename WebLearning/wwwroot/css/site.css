@@ -15,13 +15,18 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-color: RGB(223, 207, 190);
+    /*background-color: RGB(223, 207, 190);*/
+    background-image: url("bck.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+   /* height : 90%;
+    width : 100%;*/
 }
-
-.border-top {
+    .border-top {
     position: absolute;
     bottom: 0px;
     font-size: 20px;
-
+    background-color: white;
 }
 
