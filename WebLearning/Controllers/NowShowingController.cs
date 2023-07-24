@@ -139,6 +139,38 @@ namespace MovieManagementMVC.Controllers
 
             return View(ns);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit (string id,NowShowing nowShowing)
+        {
+            if (id != nowShowing.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(nowShowing);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!NowShowingExists(nowShowing.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(nowShowing);
+        }
+
         public async Task<IActionResult> Delete(string? id)
         {
             if (id == null || _context.NowShowings == null)
@@ -172,7 +204,10 @@ namespace MovieManagementMVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        private bool NowShowingExists(string id)
+        {
+            return (_context.NowShowings?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
     }
 }
 
