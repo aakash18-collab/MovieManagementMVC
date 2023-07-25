@@ -105,23 +105,25 @@ namespace MovieManagementMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MoviesDropDownViewModel viewModel)
         {
-            //if (ModelState.IsValid)
-            //{
-            var nowShowing = new NowShowing
+            if (ModelState.IsValid)
             {
+                var nowShowing = new NowShowing
+                {
 
-                Occupancy = viewModel.Occupancy,
-                MovieName = viewModel.MovieHallDTO.MovieName,
-                MovieDescription = viewModel.MovieHallDTO.MovieDescription,
-                HallName = viewModel.MovieHallDTO.HallName,
-                ShiftTime = viewModel.MovieHallDTO.ShiftTime
-            };
+                    Occupancy = viewModel.Occupancy,
+                    MovieName = viewModel.MovieHallDTO.MovieName,
+                    MovieDescription = viewModel.MovieHallDTO.MovieDescription,
+                    HallName = viewModel.MovieHallDTO.HallName,
+                    ShiftTime = viewModel.MovieHallDTO.ShiftTime
+                };
 
-            _context.Add(nowShowing);
-            await _context.SaveChangesAsync();
+                _context.Add(nowShowing);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
-            //return View(viewModel); }
+                return RedirectToAction(nameof(Index));
+            }
+                return View(viewModel);
+            
         }
         public async Task<IActionResult> Edit(string? id)
         {
